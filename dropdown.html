@@ -1,0 +1,82 @@
+<div x-data="Dropdown()" x-init="selectedValue" class="Dropdown inline-block relative w-auto"
+    @click.outside="closeDropdown" @keyup.escape="closeDropdown">
+    <div class="Dropdown__action">
+        <button type="button" x-on:click="openDialog"
+            class="px-4 py-2 font-medium flex justify-between items-center gap-5 text-left text-base text-white bg-blue-600 rounded-md shadow shadow-blue-300">
+            <span x-text="selectedValue">
+
+            </span>
+            <span class="block transition duration-300 ease-linear transform-gpu"
+                :class="isOpen === true ? 'rotate-180' : 'rotate-0'">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                    stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                </svg>
+            </span>
+        </button>
+
+
+    </div>
+    <div class="Dropdown__body absolute top-full left-0 w-full bg-white shadow-lg rounded-md max-h-52 overflow-y-auto"
+        x-show="isOpen" x-cloak x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0 translate-y-6" x-transition:enter-end="opacity-100 translate-y-0"
+        x-transition:leave="transition ease-in duration-300" x-transition:leave-start="opacity-100 translate-y-0"
+        x-transition:leave-end="opacity-0 translate-y-6">
+        <ul class="Dropdown__lists py-4">
+            <template x-for="list in lists">
+                <li class="Dropdown__lists-list text-left p-3 px-4 text-sm font-medium cursor-pointer"
+                    :class="list === selectedValue ? 'bg-blue-600 text-white hover:bg-blue-600' : 'text-gray-500 hover:bg-gray-100' "
+                    x-text="list" x-on:click="updateList(list)">
+                </li>
+            </template>
+
+
+        </ul>
+    </div>
+</div>
+
+
+
+<script>
+    function Dropdown() {
+        return {
+            // Varibles to hold a value for future use
+            isOpen: false,
+            selectedValue: "",
+            lists: [
+                "Welcome to Dropdown",
+                "Thanks for Coming.!",
+                "Hello World!",
+                "Nice Meet you.!",
+                "Text 1",
+            ],
+
+            init() {
+                // Check selected value is empty when fresh start
+                if (this.selectedValue === "") {
+                    this.selectedValue = "Please select a value";
+                }
+                // the variable whenever it changes this will trigger
+                this.$watch("selectedValue", (value) => {
+                    console.log(value);
+                });
+            },
+
+            // Open the dropdown dialog
+            openDialog() {
+                this.isOpen = !this.isOpen;
+            },
+
+            // Update the selected into view
+            updateList(val) {
+                this.selectedValue = val;
+                this.closeDropdown();
+            },
+
+            // Close the dropdown dialog
+            closeDropdown() {
+                this.isOpen = false;
+            },
+        };
+    }
+</script>
